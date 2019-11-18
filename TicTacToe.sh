@@ -1,15 +1,15 @@
 #!/bin/bash -x
-row=3
-column=3
+ROW=3
+COLUMN=3
 playPosition=0
 computer=''
 player=''
 randNum=0
 function resetBoard()
 {
-	for (( i=0; i<$row; i++ ))
+	for (( i=0; i<$ROW; i++ ))
 	do
-		for (( j=0; j<$column; j++ ))
+		for (( j=0; j<$COLUMN; j++ ))
 		do
 			playPosition=$(( playPosition + 1 ))
 			board[$i,$j]=$playPosition
