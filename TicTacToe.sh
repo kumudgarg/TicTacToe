@@ -1,15 +1,17 @@
 #!/bin/bash -x
-ROW=3
-COLUMN=3
+row=3
+column=3
 playPosition=0
 computer=''
 player=''
 randNum=0
+toss=$(( RANDOM%2 ))
+randNum=$(( RANDOM % 2 ))
 function resetBoard()
 {
-	for (( i=0; i<$ROW; i++ ))
+	for (( i=0; i<$row; i++ ))
 	do
-		for (( j=0; j<$COLUMN; j++ ))
+		for (( j=0; j<$column; j++ ))
 		do
 			playPosition=$(( playPosition + 1 ))
 			board[$i,$j]=$playPosition
@@ -18,7 +20,6 @@ function resetBoard()
 }
 function symbolAssign
 {
-	randNum=$(( Random % 2 ))
 	if [ $randNum -eq 0 ]
 	then
 		computer='0'
@@ -30,5 +31,15 @@ function symbolAssign
 		 echo $computer $player
 	fi
 }
+function whoPlayFirst()
+{
+	if [ $toss -eq 0 ]
+	then
+			echo "computer will play first"
+	else
+			echo "player will play first"
+	fi
+}
 resetBoard
 symbolAssign
+whoPlayFirst
