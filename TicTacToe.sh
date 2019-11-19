@@ -54,52 +54,52 @@ function displayBoard()
 {
 	count=0
 	for (( row=0; row<$ROW; row++ ))
-   do
-      for (( col=0; col<$COLUMN; col++ ))
-      do 
-				echo -n "|   ${board[$row,$col]}    | "
+   	do
+      		for (( col=0; col<$COLUMN; col++ ))
+      		do 
+			echo -n "|   ${board[$row,$col]}    | "
 		done
-			printf "\n"
-			echo  -n " ------   ------   ------ "
-			printf "\n"
+		printf "\n"
+		echo  -n " ------   ------   ------ "
+		printf "\n"
 	done
 }
 function playTicTacToe()
 {
- whoPlayFirst
- local row=0
- local column=0
- for (( turn=0; turn<ARRAYLEN; turn++ ))
- do
-	displayBoard
-	read -p " enter player choice " playerChoice
-	row=$(( $playerChoice / $ROW ))
-	if [ $(( $playerChoice % $ROW )) -eq 0 ]
-	then
-		row=$(( $row - 1 ))
-	fi 
-	column=$(( $playerChoice %  $COLUMN ))
-	if [ $column -eq 0 ]
-	then
-	column=$(( $column + 2 ))
-	else
-		column=$(( $column - 1 ))
-	fi
-	if [ $((${board[$row,$column]})) -eq $(($playerSymbol)) ]
-	then
-		echo "Invalid move"
-		(( turn-- ))
-	fi
-	board[$row,$column]=$playerSymbol
-	isCheckResult
-	if [ $valid == true ]
-        then
+ 	whoPlayFirst
+ 	local row=0
+ 	local column=0
+ 	for (( turn=0; turn<ARRAYLEN; turn++ ))
+ 	do
 		displayBoard
-                echo "you are won"
-                return 0
-         fi 
- done
-	echo "game Tie"
+		read -p " enter player choice " playerChoice
+		row=$(( $playerChoice / $ROW ))
+		if [ $(( $playerChoice % $ROW )) -eq 0 ]
+		then
+			row=$(( $row - 1 ))
+		fi 
+		column=$(( $playerChoice %  $COLUMN ))
+		if [ $column -eq 0 ]
+		then
+			column=$(( $column + 2 ))
+		else
+			column=$(( $column - 1 ))
+		fi
+		if [ $((${board[$row,$column]})) -eq $(($playerSymbol)) ]
+		then
+			echo "Invalid move"
+			(( turn-- ))
+		fi
+		board[$row,$column]=$playerSymbol
+		isCheckResult
+		if [ $valid == true ]
+	        then
+			displayBoard
+	                echo "you are won"
+	                return 0
+	         fi 
+	 done
+	 echo "game Tie"
 }
 function isCheckResult()
 {
