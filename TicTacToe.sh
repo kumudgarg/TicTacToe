@@ -1,14 +1,17 @@
 #!/bin/bash -x
+#<------Constants------------------->
 ROW=3
 COLUMN=3
+ARRAYLEN=$(( $ROW * $COLUMN ))
+#<---------Variables----------------->
 playPosition=0
 computerSymbol=""
 playerSymbol=""
 randNum=0
-arrLen=$(( $ROW * $COLUMN ))
 toss=$(( RANDOM%2 ))
 randNum=$(( RANDOM % 2 ))
-count=0
+row=0
+column=0
 declare -A board
 function resetBoard()
 {
@@ -64,31 +67,32 @@ function displayBoard()
 }
 function playTicTacToe()
 {
-	whoPlayFirst
-
-	for (( k=0; k<arrLen; k++ ))
-	do
-		displayBoard
-      read -p " enter player choice " playerChoice
-		for (( i=0; i<$ROW; i++ ))
-		do
-			for (( j=0; j<$COLUMN; j++ ))
-			do
-				while [  $((${board[$i,$j]})) -eq $(($playerSymbol)) ]
-            do
-						echo "Invalid move"
-						displayBoard
-      				read -p " enter playerSymbol choice " playerChoice
-				done
-				if [ $((${board[$i,$j]})) -eq $playerChoice ] 
-				then
-				 	board[$i,$j]=$playerSymbol 
-				fi
-			done
-      done
-	done
+ whoPlayFirst
+ for (( k=0; k<$ARRAYLEN; k++ ))
+ do
+	displayBoard
+	read -p " enter player choice " playerChoice
+	row=$(( $playerChoice / $ROW ))
+	if [ $(( $playerChoice % $ROW )) -eq 0 ]
+	then
+		row=$(( $row - 1 ))
+	fi 
+	column=$(( $playerChoice %  $COLUMN ))
+	if [ $column -eq 0 ]
+	then
+	column=$(( $column + 2 ))
+	else
+		column=$(( $column - 1 ))
+	fi
+	if [ ${board[$row,$column]} -eq $playerSymbol ]
+	then
+		echo "Invalid move"
+		(( k-- ))
+	fi
+	board[$row,$column]=$playerSymbol
+ done
 }
+ 
 resetBoard
 symbolAssign
 playTicTacToe
-displayBoard
