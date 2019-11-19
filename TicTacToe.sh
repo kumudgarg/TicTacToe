@@ -10,17 +10,16 @@ playerSymbol=""
 randNum=0
 toss=$(( RANDOM%2 ))
 randNum=$(( RANDOM % 2 ))
-row=0
-column=0
+valid=false
 declare -A board
 function resetBoard()
 {
-	for (( i=0; i<$ROW; i++ ))
+	for (( row=0; row<$ROW; row++ ))
 	do
-		for (( j=0; j<$COLUMN; j++ ))
+		for (( col=0; col<$COLUMN; col++ ))
 		do
 			count=$(( $count + 1 ))
-			board[$i,$j]=$count
+			board[$row,$col]=$count
 		done
 	done
 }
@@ -54,11 +53,11 @@ function whoPlayFirst()
 function displayBoard()
 {
 	count=0
-	for (( i=0; i<$ROW; i++ ))
+	for (( row=0; row<$ROW; row++ ))
    do
-      for (( j=0; j<$COLUMN; j++ ))
+      for (( col=0; col<$COLUMN; col++ ))
       do 
-				echo -n "|   ${board[$i,$j]}    | "
+				echo -n "|   ${board[$row,$col]}    | "
 		done
 			printf "\n"
 			echo  -n " ------   ------   ------ "
@@ -68,7 +67,9 @@ function displayBoard()
 function playTicTacToe()
 {
  whoPlayFirst
- for (( k=0; k<$ARRAYLEN; k++ ))
+ local row=0
+ local column=0
+ for (( turn=0; turn<ARRAYLEN; turn++ ))
  do
 	displayBoard
 	read -p " enter player choice " playerChoice
@@ -84,15 +85,50 @@ function playTicTacToe()
 	else
 		column=$(( $column - 1 ))
 	fi
-	if [ ${board[$row,$column]} -eq $playerSymbol ]
+	if [ $((${board[$row,$column]})) -eq $(($playerSymbol)) ]
 	then
 		echo "Invalid move"
-		(( k-- ))
+		(( turn-- ))
 	fi
 	board[$row,$column]=$playerSymbol
+	isCheckResult
+	if [ $valid == true ]
+        then
+		displayBoard
+                echo "you are won"
+                return 0
+         fi 
  done
+	echo "game Tie"
 }
- 
+function isCheckResult()
+{
+	if [ ${board[0,0]} == $playerSymbol ] && [ ${board[0,1]} == $playerSymbol ] && [ ${board[0,2]} == $playerSymbol ]
+	then
+		valid=true
+	elif [ ${board[1,0]} == $playerSymbol ] && [ ${board[1,1]} == $playerSymbol ] && [ ${board[1,2]} == $playerSymbol ]
+        then
+                valid=true
+	elif [ ${board[2,0]} == $playerSymbol ] && [ ${board[2,1]} == $playerSymbol ] && [ ${board[2,2]} == $playerSymbol ]
+        then
+		  valid=true
+	elif [ ${board[0,0]} == $playerSymbol ] && [ ${board[1,0]} == $playerSymbol ] && [ ${board[2,0]} == $playerSymbol ]
+        then
+                 valid=true
+	elif [ ${board[0,1]} == $playerSymbol ] && [ ${board[1,1]} == $playerSymbol ] && [ ${board[2,1]} == $playerSymbol ]
+        then
+                 valid=true
+	elif [ ${board[0,2]} == $playerSymbol ] && [ ${board[1,2]} == $playerSymbol ] && [ ${board[2,2]} == $playerSymbol ]
+        then
+		 valid=true
+        elif [ ${board[0,0]} == $playerSymbol ] && [ ${board[1,1]} == $playerSymbol ] && [ ${board[2,2]} == $playerSymbol ]
+        then
+              valid=true
+	elif [ ${board[0,2]} == $playerSymbol ] && [ ${board[1,1]} == $playerSymbol ] && [ ${board[2,0]} == $playerSymbol ]
+        then
+                valid=true
+	fi
+}
 resetBoard
 symbolAssign
 playTicTacToe
