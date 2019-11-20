@@ -10,7 +10,8 @@ playerSymbol=""
 randNum=0
 toss=$(( RANDOM%2 ))
 randNum=$(( RANDOM % 2 ))
-valid=false
+playerWinning=false
+computerWinning=false
 counter=0
 declare -A board
 function resetBoard()
@@ -97,7 +98,17 @@ function playTicTacToe()
 	fi
 	board[$row,$column]=$playerSymbol
 	checkComputerMove
-	isCheckResult
+	while [ i -le 2 ]
+	do
+	 	i=1
+		if [ i == 1 ]
+		then
+			isCheckResult $playerSymbol $computerSymbol
+		elif[ i == 2]
+		then
+			 isCheckResult $computerSymbol $playerSymbol
+		i++
+	done
 	if [ $valid == true ]
         then
 		displayBoard
@@ -110,30 +121,63 @@ function playTicTacToe()
 }
 function isCheckResult()
 {
-	if [ ${board[0,0]} == $playerSymbol ] && [ ${board[0,1]} == $playerSymbol ] && [ ${board[0,2]} == $playerSymbol ]
+	symbol=$1
+	if [ ${board[0,0]} == $symbol  && [ ${board[0,1]} == $symbol ] && [ ${board[0,2]} == $symbol ]
 	then
-		valid=true
-	elif [ ${board[1,0]} == $playerSymbol ] && [ ${board[1,1]} == $playerSymbol ] && [ ${board[1,2]} == $playerSymbol ]
-        then
-                valid=true
-	elif [ ${board[2,0]} == $playerSymbol ] && [ ${board[2,1]} == $playerSymbol ] && [ ${board[2,2]} == $playerSymbol ]
-        then
-		  valid=true
-	elif [ ${board[0,0]} == $playerSymbol ] && [ ${board[1,0]} == $playerSymbol ] && [ ${board[2,0]} == $playerSymbol ]
-        then
-                 valid=true
-	elif [ ${board[0,1]} == $playerSymbol ] && [ ${board[1,1]} == $playerSymbol ] && [ ${board[2,1]} == $playerSymbol ]
-        then
-                 valid=true
-	elif [ ${board[0,2]} == $playerSymbol ] && [ ${board[1,2]} == $playerSymbol ] && [ ${board[2,2]} == $playerSymbol ]
-        then
-		 valid=true
-        elif [ ${board[0,0]} == $playerSymbol ] && [ ${board[1,1]} == $playerSymbol ] && [ ${board[2,2]} == $playerSymbol ]
-        then
-              valid=true
-	elif [ ${board[0,2]} == $playerSymbol ] && [ ${board[1,1]} == $playerSymbol ] && [ ${board[2,0]} == $playerSymbol ]
-        then
-                valid=true
+		if [ $symbol == $playerSymbol ]
+		then
+			playerWinning=true
+		else
+			computerWinning=true
+	elif [ ${board[1,0]} == $symbol ] && [ ${board[1,1]} == $symbol ] && [ ${board[1,2]} == $symbol ]
+   then
+      if [ $symbol == $playerSymbol ]
+      then
+         playerWinning=true
+      else
+         computerWinning=true
+	elif [ ${board[2,0]} == $symbol ] && [ ${board[2,1]} == $symbol ] && [ ${board[2,2]} == $symbol ]
+   then
+		 if [ $symbol == $playerSymbol ]
+      then
+         playerWinning=true
+      else
+         computerWinning=true
+	elif [ ${board[0,0]} == $symbol ] && [ ${board[1,0]} == $symbol ] && [ ${board[2,0]} == $symbol ]
+   then
+       if [ $symbol == $playerSymbol ]
+      then
+         playerWinning=true
+      else
+         computerWinning=true       
+	elif [ ${board[0,1]} == $symbol ] && [ ${board[1,1]} == $symbol ] && [ ${board[2,1]} == $symbol ]
+   then
+      if [ $symbol == $playerSymbol ]
+      then
+         playerWinning=true
+      else
+         computerWinning=true
+	elif [ ${board[0,2]} == $symbol ] && [ ${board[1,2]} == $symbol ] && [ ${board[2,2]} == $symbol ]
+   then
+		 if [ $symbol == $playerSymbol ]
+      then
+         playerWinning=true
+      else
+         computerWinning=true
+    elif [ ${board[0,0]} == $symbol ] && [ ${board[1,1]} == $symbol ] && [ ${board[2,2]} == $symbol ]
+    then
+        if [ $symbol == $playerSymbol ]
+      then
+         playerWinning=true
+      else
+         computerWinning=true
+	elif [ ${board[0,2]} == $symbol ] && [ ${board[1,1]} == $symbol ] && [ ${board[2,0]} == $symbol ]
+   then
+       if [ $symbol == $playerSymbol ]
+      then
+         playerWinning=true
+      else
+         computerWinning=true       
 	fi
 }
 function checkComputerMove()
@@ -231,6 +275,21 @@ function isFilledCell()
 		echo false
 	fi
 }
+function conclusion()
+{
+	if [ $playerWinning == true ]
+   then
+      displayBoard
+        echo "you are won"
+         return 0
+	elif [ $playerWinning == true ]
+   then
+      displayBoard
+        echo "you are won"
+         return 0
+
+   fi 
+
 
 resetBoard
 symbolAssign
