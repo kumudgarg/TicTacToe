@@ -4,13 +4,14 @@ ROW=3
 COLUMN=3
 ARRAYLEN=$(( $ROW * $COLUMN ))
 #<---------Variables----------------->
-playPosition=0
+playerChoice=0
 computerSymbol=""
 playerSymbol=""
 randNum=0
 toss=$(( RANDOM%2 ))
 randNum=$(( RANDOM % 2 ))
 valid=false
+counter=0
 declare -A board
 function resetBoard()
 {
@@ -39,14 +40,18 @@ function symbolAssign()
 function whoPlayFirst()
 {
 	if [ $toss -eq 0 ]
-	then
+	then		row=$(( RANDOM%$ROW ))
+                	col=$(( RANDOM%$COLUMN ))
 			echo "computerSymbol will play first"
+			counter=4
 			computerSymbol="0"
-      	playerSymbol="x"
+			board[$row,$col]=$computerSymbol
+			playerSymbol="x"
 	else
 			echo "playerSymbol will play first"
+			counter=4
 			computerSymbol="x"
-      	playerSymbol="0"
+      			playerSymbol="0"
 
 	fi
 }
@@ -69,7 +74,7 @@ function playTicTacToe()
  whoPlayFirst
  local row=0
  local column=0
- for (( turn=0; turn<ARRAYLEN; turn++ ))
+ for (( turn=0; turn<$counter; turn++ ))
  do
 	displayBoard
 	read -p " enter player choice " playerChoice
@@ -100,7 +105,8 @@ function playTicTacToe()
                 return 0
          fi 
  done
-	echo "game Tie"
+	  displayBoard
+	 echo "game Tie"
 }
 function isCheckResult()
 {
@@ -134,6 +140,7 @@ function checkComputerMove()
 {
    local row=0
    local col=0
+	#<----------------row wise check------------------------------------------------------------->
    for (( row=0; row<$ROW; row++ ))
    do
       if [ ${board[$row,$col]} == $playerSymbol ] && [ ${board[$row,$(( $col + 1 ))]} == $playerSymbol ]
@@ -147,42 +154,84 @@ function checkComputerMove()
          board[$row,$(( $col + 1 ))]=$computerSymbol
       fi
    done
-   for (( col=0; col<$ROW; col++ ))
+	#<--------------------column wise check--------------------------------------------------------->
+	row=0
+   for (( col=0; col<$COLUMN; col++ ))
    do
-		row=0
-      if [ ${board[$row,$col]} == $playerSymbol ] && [ ${board[$(($row + 1)),$col]} == $playerSymbol ]
-		then
-         board[$(( $row + 2 )),$col]=$computerSymbol
-      elif [ ${board[($row,$col]} == $playerSymbol ] && [ ${board[$(($row + 2)),$col]} == $playerSymbol ]
+      if [ ${board[$row,$col]} == $playerSymbol ] && [ ${board[$(( $row+1 )),$col]} == $playerSymbol ]
       then
-         board[$(( $row + 1 )),$col]=$computerSymbol
-      elif [ ${board[$(( $row + 1 )),$col]} == $playerSymbol ] && [ ${board[$(( $row + 2 )),$col]} == $playerSymbol ]
+         board[$(( $row+2 )),$col]=$computerSymbol
+      elif [ ${board[$row,$col]} == $playerSymbol ] && [ ${board[$(($row+2)),$col]} == $playerSymbol ]
+      then
+         board[$(($row+1)),$col]=$computerSymbol
+      elif [ ${board[$(($row+1)),$col]} == $playerSymbol ] && [ ${board[$(($row+2)),$col]} == $playerSymbol ]
       then
          board[$row,$col]=$computerSymbol
       fi
    done
-   if [ ${board[$row,$col]} == $playerSymbol ] && [ ${board[$(( $row + 1 )),$(( $col + 1 ))]} == $playerSymbol ]
+	#<-----------------------------Diagonally check------------------------------------------------------>
+   col=0
+   if [ ${board[$row,$col]} == $playerSymbol ] && [ ${board[$(( $row+1 )),$(( $col+1 ))]} == $playerSymbol ]
    then
-      board[$(( $row + 2 )),$(( $col + 2 ))]=$computerSymbol
-   elif [ ${board[$row,$col]} == $playerSymbol ] && [ ${board[$(( $row + 2)),$(( $col + 2 ))]} == $playerSymbol ]
+      board[$(( $row+2 )),$(( $col+2 ))]=$computerSymbol
+   elif [ ${board[$row,$col]} == $playerSymbol ] && [ ${board[$(($row+2)),$(($col+2))]} == $playerSymbol ]
    then
-      board[$(( $row + 1 )),$(( $col + 1 ))]=$computerSymbol
-   elif [ ${board[$(( $row + 1 )),$(( $col + 1 ))]} == $playerSymbol ] && [ ${board[$(( $row + 2 )),$(( $col + 2 ))]} == $playerSymbol ]
+      board[$(($row+1)),$(($col+1))]=$computerSymbol
+   elif [ ${board[$(($row+1)),$(($col+1))]} == $playerSymbol ] && [ ${board[$(($row+2)),$(($col+2))]} == $playerSymbol ]
 	then
       board[$row,$col]=$computerSymbol
-   elif [ ${board[$row,$(( $col + 2 ))]} == $playerSymbol ] && [ ${board[$(( $row + 1 )),$(( $col + 1 ))]} == $playerSymbol ]
+   elif [ ${board[$row,$(($col+2))]} == $playerSymbol ] && [ ${board[$(($row+1)),$(($col+1))]} == $playerSymbol ]
    then
-      board[$(( $row + 2 )),$col]=$computerSymbol
-   elif [ ${board[$row,$(( $col + 2 ))]} == $playerSymbol ] && [ ${board[$(($row + 2 )),$col]} == $playerSymbol ]
+      board[$(($row+2)),$col]=$computerSymbol
+   elif [ ${board[$row,$(($col+2))]} == $playerSymbol ] && [ ${board[$(($row+2)),$col]} == $playerSymbol ]
    then
-      board[$(( $row + 1 )),$(( $col + 1 ))]=$computerSymbol
-   elif [ ${board[$(( $row + 2 )),$col]} == $playerSymbol ] && [ ${board[$(( $row + 1 )),$(( $col + 1 ))]} == $playerSymbol ]
+      board[$(($row+1)),$(($col+1))]=$computerSymbol
+   elif [ ${board[$(($row+2)),$col]} == $playerSymbol ] && [ ${board[$(($row+1)),$(($col+1))]} == $playerSymbol ]
    then
-      board[$row,$(( $col + 2 ))]=$computerSymbol
+      board[$row,$(($col+2))]=$computerSymbol
    else
-         board[$(( $row + 2 )),$(( $col+2 ))]=$computerSymbol
+	while [ true ]
+	do
+		row=$(( RANDOM%$ROW ))
+		col=$(( RANDOM%$COLUMN ))
+		if [ ${board[$row,$col]} == $playerSymbol ] || [ ${board[$row,$col]} == $computerSymbol ]
+		then
+			echo "cell occupied"
+			continue
+		else
+			board[$row,$col]=$computerSymbol
+			break
+		fi
+		 if [ isFilledCell ]
+                then
+                        echo "check"
+                        break
+                fi
+
+	done		
    fi
 }
+function isFilledCell()
+{
+	num=0
+	for (( i=0; i<$ROW; i++ ))
+	do
+		for (( j=0; j<$COLUMN; j++ ))
+		do
+			 if [ ${board[$i,$j]} == $playerSymbol ] || [ ${board[$i,$j]} == $computerSymbol ]
+                	 then
+				num=$(( $num+1 ))
+			 fi
+		done
+	done
+	if [ $num == 9 ]
+	then
+		echo true
+	else
+		echo false
+	fi
+}
+
 resetBoard
 symbolAssign
 playTicTacToe
