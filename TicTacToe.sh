@@ -43,12 +43,10 @@ function symbolAssign()
 function whoPlayFirst()
 {
 	if [ $toss -eq 0 ]
-	then		row=$(( RANDOM%$ROW ))
-                	col=$(( RANDOM%$COLUMN ))
-			echo "computerSymbol will play first"
+	then		echo "computerSymbol will play first"
 			counter=3
 			computerSymbol="0"
-			board[$row,$col]=$computerSymbol
+                        checkCorners
 			playerSymbol="x"
 	else
 			echo "playerSymbol will play first"
@@ -105,6 +103,7 @@ function playTicTacToe()
                 isCornerEmpty=false
                 continue
         fi 
+	checkCorners
 	checkComputerMove $computerSymbol
 	check
 	conclusion
@@ -347,12 +346,28 @@ function checkCorners()
      then
         board[2,2]=$computerSymbol
          isCornerEmpty=true
+     elif [ ${board[0,1]} != $playerSymbol ] && [ ${board[0,1]} != $computerSymbol ]
+     then
+        board[0,1]=$computerSymbol
+         isCornerEmpty=true
      fi
+     elif [ ${board[2,0]} != $playerSymbol ] && [ ${board[2,0]} != $computerSymbol ]
+     then
+        board[2,0]=$computerSymbol
+         isCornerEmpty=true
+     elif [ ${board[2,2]} != $playerSymbol ] && [ ${board[2,2]} != $computerSymbol ]
+     then
+        board[2,2]=$computerSymbol
+         isCornerEmpty=true
+     elif [ ${board[3,1]} != $playerSymbol ] && [ ${board[3,1]} != $computerSymbol ]
+     then
+        board[3,1]=$computerSymbol
+         isCornerEmpty=true
+
+
+
 
 }
-
-
-
 resetBoard
 symbolAssign
 playTicTacToe
