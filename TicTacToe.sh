@@ -13,6 +13,8 @@ randNum=$(( RANDOM % 2 ))
 playerWinning=false
 computerWinning=false
 counter=0
+valid=false
+isCorner=false
 declare -A board
 function resetBoard()
 {
@@ -44,13 +46,13 @@ function whoPlayFirst()
 	then		row=$(( RANDOM%$ROW ))
                 	col=$(( RANDOM%$COLUMN ))
 			echo "computerSymbol will play first"
-			counter=5
+			counter=3
 			computerSymbol="0"
 			board[$row,$col]=$computerSymbol
 			playerSymbol="x"
 	else
 			echo "playerSymbol will play first"
-			counter=5
+			counter=4
 			computerSymbol="x"
       			playerSymbol="0"
 
@@ -97,13 +99,14 @@ function playTicTacToe()
 		(( turn-- ))
 	fi
 	board[$row,$column]=$playerSymbol
+	checkComputerMove $computerSymbol
+	check
+	conclusion
+		if [ $valid == true ]
+   		then
+         		return 0
+    		fi
 	checkComputerMove $playerSymbol
-	#check
-		#if [ $(conclusion) ]
-   	#then
-         #return 0
-    	#fi 
-	#checkComputerMove
 		#check
 	#if [ $(conclusion) ]
    #then
@@ -125,44 +128,44 @@ function isCheckResult()
 			computerWinning=true
 		fi
 	elif [ ${board[1,0]} == $symbol ] && [ ${board[1,1]} == $symbol ] && [ ${board[1,2]} == $symbol ]
-   then
-      if [ $symbol == $playerSymbol ]
-      then
-         playerWinning=true
-      else
-         computerWinning=true
+   	then
+      		if [ $symbol == $playerSymbol ]
+      		then
+         		playerWinning=true
+      		else
+         		computerWinning=true
 		fi
 	elif [ ${board[2,0]} == $symbol ] && [ ${board[2,1]} == $symbol ] && [ ${board[2,2]} == $symbol ]
-   then
+   	then
 		 if [ $symbol == $playerSymbol ]
-      then
-         playerWinning=true
-      else
-         computerWinning=true
+      	then
+         	playerWinning=true
+      	else
+         	computerWinning=true
 		fi
 	elif [ ${board[0,0]} == $symbol ] && [ ${board[1,0]} == $symbol ] && [ ${board[2,0]} == $symbol ]
-   then
-       if [ $symbol == $playerSymbol ]
-      then
-         playerWinning=true
-      else
-         computerWinning=true
+   	then
+       		if [ $symbol == $playerSymbol ]
+      		then
+         		playerWinning=true
+      		else
+         		computerWinning=true
 		fi       
 	elif [ ${board[0,1]} == $symbol ] && [ ${board[1,1]} == $symbol ] && [ ${board[2,1]} == $symbol ]
-   then
-      if [ $symbol == $playerSymbol ]
-      then
-         playerWinning=true
-      else
-         computerWinning=true
-		fi
+   	then
+	      if [ $symbol == $playerSymbol ]
+	      then
+	         	playerWinning=true
+	      else
+	         	computerWinning=true
+	      fi	
 	elif [ ${board[0,2]} == $symbol ] && [ ${board[1,2]} == $symbol ] && [ ${board[2,2]} == $symbol ]
-   then
+   	then
 		 if [ $symbol == $playerSymbol ]
-      then
-         playerWinning=true
-      else
-         computerWinning=true
+      		 then
+         		playerWinning=true
+      		 else
+         		computerWinning=true
 		fi
     elif [ ${board[0,0]} == $symbol ] && [ ${board[1,1]} == $symbol ] && [ ${board[2,2]} == $symbol ]
     then
@@ -240,11 +243,11 @@ echo "###########################################"
    then
       board[$row,$(($col+2))]=$computerSymbol
    else
-	if [ $sign == $playerSymbol ]
+	if [ $sign == $computerSymbol ]
 	then
 		while [ true ]
 		do
-			if [ isFilledCell ]
+			if [ $(isFilledCell) ]
                         then
                                 echo "check"
                                 break
@@ -287,7 +290,7 @@ function isFilledCell()
 function conclusion()
 {
 	if [ $playerWinning == true ]
-   then
+        then
       displayBoard
         echo "you are won"
          valid=true
@@ -315,6 +318,7 @@ function check()
       (( i++ ))
    done
  }
+
 
 resetBoard
 symbolAssign
