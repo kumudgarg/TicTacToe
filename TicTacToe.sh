@@ -46,7 +46,7 @@ function whoPlayFirst()
 	then		echo "computerSymbol will play first"
 			counter=3
 			computerSymbol="0"
-                        checkCorners
+                       checkCornerOrCenterOrAnywhere
 			playerSymbol="x"
 	else
 			echo "playerSymbol will play first"
@@ -83,6 +83,7 @@ function playTicTacToe()
 	if [ $(( $playerChoice % $ROW )) -eq 0 ]
 	then
 		row=$(( $row - 1 ))
+
 	fi 
 	column=$(( $playerChoice %  $COLUMN ))
 	if [ $column -eq 0 ]
@@ -97,13 +98,12 @@ function playTicTacToe()
 		(( turn-- ))
 	fi
 	board[$row,$column]=$playerSymbol
-	checkCorners
+	checkCornerOrCenterOrAnywhere
         if[ $isCornerEmpty == true ]
         then
                 isCornerEmpty=false
                 continue
         fi 
-	checkCorners
 	checkComputerMove $computerSymbol
 	check
 	conclusion
@@ -112,11 +112,7 @@ function playTicTacToe()
          		return 0
     		fi
 	checkComputerMove $playerSymbol
-		#check
-	#if [ $(conclusion) ]
-   #then
-         #return 0
-    #fi 
+
 	done
 		displayBoard
 	 	echo "game Tie"
@@ -300,7 +296,7 @@ function check()
       (( i++ ))
    done
 }
-function checkCorners()
+functioncheckCornerOrCenterOrAnywhere()
 {
      if [ ${board[0,0]} != $playerSymbol ] && [ ${board[0,0]} != $computerSymbol ]
      then
