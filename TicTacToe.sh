@@ -99,6 +99,12 @@ function playTicTacToe()
 		(( turn-- ))
 	fi
 	board[$row,$column]=$playerSymbol
+	checkCorners
+        if[ $isCorner == true ]
+        then
+                isCorner=false
+                continue
+        fi 
 	checkComputerMove $computerSymbol
 	check
 	conclusion
@@ -317,7 +323,28 @@ function check()
       fi
       (( i++ ))
    done
- }
+}
+function checkCorners()
+{
+     if [ ${board[0,0]} != $playerSymbol ] && [ ${board[0,0]} != $computerSymbol ]
+     then
+        board[0,0]=$computerSymbol
+        isCorner=true
+     elif [ ${board[0,2]} != $playerSymbol ] && [ ${board[0,2]} != $computerSymbol ]
+     then
+        board[0,2]=$computerSymbol
+         isCorner=true
+     elif [ ${board[2,0]} != $playerSymbol ] && [ ${board[2,0]} != $computerSymbol ]
+     then
+        board[2,0]=$computerSymbol
+         isCorner=true
+     elif [ ${board[2,2]} != $playerSymbol ] && [ ${board[2,2]} != $computerSymbol ]
+     then
+        board[2,2]=$computerSymbol
+         isCorner=true
+     fi
+}
+
 
 
 resetBoard
