@@ -343,6 +343,12 @@ function checkCorners()
         board[2,2]=$computerSymbol
          isCornerEmpty=true
      fi
+     elif [ ${board[1,1]} != $playerSymbol ] && [ ${board[1,1]} != $computerSymbol ]
+     then
+        board[2,2]=$computerSymbol
+         isCornerEmpty=true
+     fi
+
 }
 
 
