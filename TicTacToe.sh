@@ -14,7 +14,7 @@ playerWinning=false
 computerWinning=false
 counter=0
 valid=false
-isCorner=false
+isCornerEmpty=false
 declare -A board
 function resetBoard()
 {
@@ -100,9 +100,9 @@ function playTicTacToe()
 	fi
 	board[$row,$column]=$playerSymbol
 	checkCorners
-        if[ $isCorner == true ]
+        if[ $isCornerEmpty == true ]
         then
-                isCorner=false
+                isCornerEmpty=false
                 continue
         fi 
 	checkComputerMove $computerSymbol
@@ -329,19 +329,19 @@ function checkCorners()
      if [ ${board[0,0]} != $playerSymbol ] && [ ${board[0,0]} != $computerSymbol ]
      then
         board[0,0]=$computerSymbol
-        isCorner=true
+        isCornerEmpty=true
      elif [ ${board[0,2]} != $playerSymbol ] && [ ${board[0,2]} != $computerSymbol ]
      then
         board[0,2]=$computerSymbol
-         isCorner=true
+         isCornerEmpty=true
      elif [ ${board[2,0]} != $playerSymbol ] && [ ${board[2,0]} != $computerSymbol ]
      then
         board[2,0]=$computerSymbol
-         isCorner=true
+         isCornerEmpty=true
      elif [ ${board[2,2]} != $playerSymbol ] && [ ${board[2,2]} != $computerSymbol ]
      then
         board[2,2]=$computerSymbol
-         isCorner=true
+         isCornerEmpty=true
      fi
 }
 
