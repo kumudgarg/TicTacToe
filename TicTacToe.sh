@@ -34,7 +34,7 @@ function whoPlayFirst()
 			echo "computerSymbol will play first"
 			counter=3
 			computerSymbol="0"
-         checkWinAndLooseCornerOrCenterOrAnywhere
+         checkCornerOrCenterOrAnywhere
 			playerSymbol="x"
 	else
 			echo "playerSymbol will play first"
@@ -85,7 +85,7 @@ function playTicTacToe()
 			(( turn-- ))
 		fi
 		board[$row,$column]=$playerSymbol
-		checkWinAndLooseCornerOrCenterOrAnywhere
+		checkCornerOrCenterOrAnywhere
       if[ $isCornerEmpty == true ]
       then
              isCornerEmpty=false
@@ -115,61 +115,61 @@ function ischeckWinAndLooseResult()
 		else
 			computerWinning=true
 		fi
-	elif [ ${board[1,0]} == $symbol ] && [ ${board[1,1]} == $symbol ] && [ ${board[1,2]} == $symbol ]
-   	then
-      		if [ $symbol == $playerSymbol ]
-      		then
-         		playerWinning=true
-      		else
-         		computerWinning=true
+	 elif [ ${board[1,0]} == $symbol ] && [ ${board[1,1]} == $symbol ] && [ ${board[1,2]} == $symbol ]
+    then
+		if [ $symbol == $playerSymbol ]
+		then
+   		playerWinning=true
+		else
+   		computerWinning=true
 		fi
-	elif [ ${board[2,0]} == $symbol ] && [ ${board[2,1]} == $symbol ] && [ ${board[2,2]} == $symbol ]
-   	then
+	 elif [ ${board[2,0]} == $symbol ] && [ ${board[2,1]} == $symbol ] && [ ${board[2,2]} == $symbol ]
+    then
 		 if [ $symbol == $playerSymbol ]
       	then
          	playerWinning=true
       	else
          	computerWinning=true
-		fi
-	elif [ ${board[0,0]} == $symbol ] && [ ${board[1,0]} == $symbol ] && [ ${board[2,0]} == $symbol ]
-   	then
-       		if [ $symbol == $playerSymbol ]
-      		then
-         		playerWinning=true
-      		else
-         		computerWinning=true
-		fi       
-	elif [ ${board[0,1]} == $symbol ] && [ ${board[1,1]} == $symbol ] && [ ${board[2,1]} == $symbol ]
-   	then
-	      if [ $symbol == $playerSymbol ]
-	      then
-	         	playerWinning=true
-	      else
-	         	computerWinning=true
-	      fi	
-	elif [ ${board[0,2]} == $symbol ] && [ ${board[1,2]} == $symbol ] && [ ${board[2,2]} == $symbol ]
-   	then
-		 if [ $symbol == $playerSymbol ]
-      		 then
-         		playerWinning=true
-      		 else
-         		computerWinning=true
-		fi
+		 fi
+	 elif [ ${board[0,0]} == $symbol ] && [ ${board[1,0]} == $symbol ] && [ ${board[2,0]} == $symbol ]
+    then
+ 		if [ $symbol == $playerSymbol ]
+		then
+   		playerWinning=true
+		else
+   		computerWinning=true
+      fi       
+	 elif [ ${board[0,1]} == $symbol ] && [ ${board[1,1]} == $symbol ] && [ ${board[2,1]} == $symbol ]
+    then
+      if [ $symbol == $playerSymbol ]
+      then
+         	playerWinning=true
+      else
+         	computerWinning=true
+      fi	
+	 elif [ ${board[0,2]} == $symbol ] && [ ${board[1,2]} == $symbol ] && [ ${board[2,2]} == $symbol ]
+    then
+	 	if [ $symbol == $playerSymbol ]
+     	then
+	 		playerWinning=true
+	 	else
+			computerWinning=true
+	 	fi
     elif [ ${board[0,0]} == $symbol ] && [ ${board[1,1]} == $symbol ] && [ ${board[2,2]} == $symbol ]
     then
-        if [ $symbol == $playerSymbol ]
-      then
-         playerWinning=true
-      else
-         computerWinning=true
+	   if [ $symbol == $playerSymbol ]
+	   then
+	      	playerWinning=true
+	  	  else
+	      	computerWinning=true
 		fi
-	elif [ ${board[0,2]} == $symbol ] && [ ${board[1,1]} == $symbol ] && [ ${board[2,0]} == $symbol ]
-   then
-       if [ $symbol == $playerSymbol ]
-      then
-         playerWinning=true
-      else
-         computerWinning=true
+	 elif [ ${board[0,2]} == $symbol ] && [ ${board[1,1]} == $symbol ] && [ ${board[2,0]} == $symbol ]
+    then
+    	if [ $symbol == $playerSymbol ]
+	   then
+	   	playerWinning=true
+	   else
+	   	computerWinning=true
 		fi       
 	fi
 }
@@ -237,7 +237,7 @@ function isFilledCell()
 		for (( j=0; j<$COLUMN; j++ ))
 		do
 			 if [ ${board[$i,$j]} == $playerSymbol ] || [ ${board[$i,$j]} == $computerSymbol ]
-                	 then
+          then
 				num=$(( $num+1 ))
 			 fi
 		done
@@ -252,18 +252,16 @@ function isFilledCell()
 function conclusion()
 {
 	if [ $playerWinning == true ]
-        then
-      displayBoard
-        echo "you are won"
-         valid=true
-
+   then
+	   displayBoard
+	   echo "you are won"
+	   valid=true
 	elif [ $computerWinning == true ]
    then
-      displayBoard
-        echo "you are loose"
-         valid=true
-
-   fi 
+   	displayBoard
+     	echo "you are loose"
+      valid=true
+	fi 
 }
 function checkWinAndLoose()
 {
@@ -280,7 +278,7 @@ function checkWinAndLoose()
       (( i++ ))
    done
 }
-functioncheckWinAndLooseCornerOrCenterOrAnywhere()
+function checkCornerOrCenterOrAnywhere()
 {
      if [ ${board[0,0]} != $playerSymbol ] && [ ${board[0,0]} != $computerSymbol ]
      then
@@ -289,41 +287,37 @@ functioncheckWinAndLooseCornerOrCenterOrAnywhere()
      elif [ ${board[0,2]} != $playerSymbol ] && [ ${board[0,2]} != $computerSymbol ]
      then
         board[0,2]=$computerSymbol
-         isCornerEmpty=true
+        isCornerEmpty=true
      elif [ ${board[2,0]} != $playerSymbol ] && [ ${board[2,0]} != $computerSymbol ]
      then
         board[2,0]=$computerSymbol
-         isCornerEmpty=true
+        isCornerEmpty=true
      elif [ ${board[2,2]} != $playerSymbol ] && [ ${board[2,2]} != $computerSymbol ]
      then
         board[2,2]=$computerSymbol
-         isCornerEmpty=true
+        isCornerEmpty=true
      fi
      elif [ ${board[1,1]} != $playerSymbol ] && [ ${board[1,1]} != $computerSymbol ]
      then
         board[2,2]=$computerSymbol
-         isCornerEmpty=true
+        isCornerEmpty=true
      elif [ ${board[0,1]} != $playerSymbol ] && [ ${board[0,1]} != $computerSymbol ]
      then
         board[0,1]=$computerSymbol
-         isCornerEmpty=true
+        isCornerEmpty=true
      fi
      elif [ ${board[2,0]} != $playerSymbol ] && [ ${board[2,0]} != $computerSymbol ]
      then
         board[2,0]=$computerSymbol
-         isCornerEmpty=true
+        isCornerEmpty=true
      elif [ ${board[2,2]} != $playerSymbol ] && [ ${board[2,2]} != $computerSymbol ]
      then
         board[2,2]=$computerSymbol
-         isCornerEmpty=true
+        isCornerEmpty=true
      elif [ ${board[3,1]} != $playerSymbol ] && [ ${board[3,1]} != $computerSymbol ]
      then
         board[3,1]=$computerSymbol
-         isCornerEmpty=true
-
-
-
-
+        isCornerEmpty=true
 }
 resetBoard
 playTicTacToe
