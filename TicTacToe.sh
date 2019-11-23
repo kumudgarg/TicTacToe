@@ -15,6 +15,7 @@ computerWinning=false
 counter=0
 valid=false
 isCornerEmpty=false
+checkCondition=false
 declare -A board
 function resetBoard()
 {
@@ -32,15 +33,16 @@ function whoPlayFirst()
 	if [ $toss -eq 0 ]
 	then		
 		echo "computerSymbol will play first"
-		counter=3
+		counter=4
 		computerSymbol="0"
 		checkCornerOrCenterOrAnywhere
 		playerSymbol="x"
 	else
 		echo "playerSymbol will play first"
-		counter=4
+		counter=5
 		computerSymbol="x"
       		playerSymbol="0"
+		
 
 	fi
 }
@@ -79,27 +81,36 @@ function playTicTacToe()
 		else
 			column=$(( $column - 1 ))
 		fi
-		if [ $((${board[$row,$column]})) -eq $(($playerSymbol)) ]
+		if [ $((${board[$row,$column]})) -eq $(($playerSymbol)) ] && [ ${board[$row,$column]} == $computerSymbol ]
 		then
 			echo "Invalid move"
 			(( turn-- ))
+			continue
 		fi
 		board[$row,$column]=$playerSymbol
+		checkWinAndLooseComputerMove $computerSymbol
+                checkWinAndLoose
+                conclusion
+                if [ $valid == true ]
+                then
+                	return 0
+                 fi
+		checkWinAndLooseComputerMove $playerSymbol
+		if [ $checkCondition == true ]
+		then
+			checkCondtion=false
+			checkWinAndLoose
+	                conclusion
+			continue
+		fi
 		checkCornerOrCenterOrAnywhere
-      		if[ $isCornerEmpty == true ]
+      		if [ $isCornerEmpty == true ]
       		then
              		isCornerEmpty=false
-             		continue
-      		fi 
-   		checkWinAndLooseComputerMove $computerSymbol
-		checkWinAndLoose
-		conclusion
-		if [ $valid == true ]
-	   	then
-	         	return 0
-	    	fi
-		checkWinAndLooseComputerMove $playerSymbol
-
+			checkWinAndLoose
+	                conclusion
+		fi 
+		
 	done
 	displayBoard
 	echo "game Tie"
@@ -119,9 +130,9 @@ function ischeckWinAndLooseResult()
     	 then
 		if [ $symbol == $playerSymbol ]
 		then
-   		playerWinning=true
+   			playerWinning=true
 		else
-   		computerWinning=true
+   			computerWinning=true
 		fi
 	 elif [ ${board[2,0]} == $symbol ] && [ ${board[2,1]} == $symbol ] && [ ${board[2,2]} == $symbol ]
     	 then
@@ -181,14 +192,26 @@ function checkWinAndLooseComputerMove()
 	#<----------------row wise checkWinAndLoose------------------------------------------------------------->  
 	for (( row=0; row<$ROW; row++ ))
 	do
-		if [ ${board[$row,$col]} == $sign ] && [ ${board[$row,$(( $col + 1 ))]} == $sign ]
+	if [ ${board[$row,$col]} == $sign ] && [ ${board[$row,$(( $col + 1 ))]} == $sign ]
+	then
+		if [ $sign == $playerSymbol ]
 		then
+			checkCondition=true
+		fi
 		board[$row,$(( $col + 2 ))]=$computerSymbol
 	elif [ ${board[$row,$(( $col + 1 ))]} == $sign ] && [ ${board[$row,$(( $col + 2 ))]} == $sign ]
 	then
+		if [ $sign == $playerSymbol ]
+                then
+                        checkCondition=true
+                fi
 		board[$row,$col]=$computerSymbol
 	elif [ ${board[$row,$col]} == $sign ] && [ ${board[$row,$(( $col + 2 ))]} == $sign ]
 	then
+		if [ $sign == $playerSymbol ]
+                then
+                         checkCondition=true
+                fi
 		board[$row,$(( $col + 1 ))]=$computerSymbol
 	fi
 	done
@@ -198,13 +221,25 @@ function checkWinAndLooseComputerMove()
    	do
       		if [ ${board[$row,$col]} == $sign ] && [ ${board[$(( $row+1 )),$col]} == $sign ]
       		then
-         		board[$(( $row+2 )),$col]=$computerSymbol
+			if [ $sign == $playerSymbol ]
+                	then
+                        	 checkCondition=true
+                	fi
+			board[$(( $row+2 )),$col]=$computerSymbol
       		elif [ ${board[$row,$col]} == $sign ] && [ ${board[$(($row+2)),$col]} == $sign ]
       		then
-         		board[$(($row+1)),$col]=$computerSymbol
+			if [ $sign == $playerSymbol ]
+                	then
+                        	 checkCondition=true
+                	fi
+			board[$(($row+1)),$col]=$computerSymbol
 		elif [ ${board[$(($row+1)),$col]} == $sign ] && [ ${board[$(($row+2)),$col]} == $sign ]
 	      	then
-	        	board[$row,$col]=$computerSymbol
+			if [ $sign == $playerSymbol ]
+                	then
+                        	 checkCondition=true
+                	fi
+			board[$row,$col]=$computerSymbol
       		fi
    	done
 	#<-----------------------------Diagonally checkWinAndLoose------------------------------------------------------>
@@ -212,20 +247,44 @@ function checkWinAndLooseComputerMove()
 	if [ ${board[$row,$col]} == $sign ] && [ ${board[$(( $row+1 )),$(( $col+1 ))]} == $sign ]
 	then
 		board[$(( $row+2 )),$(( $col+2 ))]=$computerSymbol
+		if [ $sign == $playerSymbol ]
+                then
+                         checkCondition=true
+                fi
 	elif [ ${board[$row,$col]} == $sign ] && [ ${board[$(($row+2)),$(($col+2))]} == $sign ]
 	then
+		if [ $sign == $playerSymbol ]
+                then
+                         checkCondition=true
+                fi
 		board[$(($row+1)),$(($col+1))]=$computerSymbol
 	elif [ ${board[$(($row+1)),$(($col+1))]} == $sign ] && [ ${board[$(($row+2)),$(($col+2))]} == $sign ]
 	then
+		if [ $sign == $playerSymbol ]
+                then
+                         checkCondition=true
+                fi
 		board[$row,$col]=$computerSymbol
 	elif [ ${board[$row,$(($col+2))]} == $sign ] && [ ${board[$(($row+1)),$(($col+1))]} == $sign ]
 	then
+		if [ $sign == $playerSymbol ]
+                then
+                         checkCondition=true
+                fi
 		board[$(($row+2)),$col]=$computerSymbol
 	elif [ ${board[$row,$(($col+2))]} == $sign ] && [ ${board[$(($row+2)),$col]} == $sign ]
 	then
+		if [ $sign == $playerSymbol ]
+                then
+                         checkCondition=true
+                fi
 		board[$(($row+1)),$(($col+1))]=$computerSymbol
 	elif [ ${board[$(($row+2)),$col]} == $sign ] && [ ${board[$(($row+1)),$(($col+1))]} == $sign ]
 	then
+		if [ $sign == $playerSymbol ]
+                then
+                         checkCondition=true
+                fi
 		board[$row,$(($col+2))]=$computerSymbol
 	fi
 }
@@ -280,7 +339,7 @@ function checkWinAndLoose()
 }
 function checkCornerOrCenterOrAnywhere()
 {
-	if [ ${board[0,0]} != $playerSymbol ] && [ ${board[0,0]} != $computerSymbol ]
+	if [[ ${board[0,0]} != $playerSymbol ]] && [[ ${board[0,0]} != $computerSymbol ]]
 	then
 		board[0,0]=$computerSymbol
 		isCornerEmpty=true
@@ -316,6 +375,7 @@ function checkCornerOrCenterOrAnywhere()
 	then
 		board[3,1]=$computerSymbol
 		isCornerEmpty=true
+	fi
 }
 resetBoard
 playTicTacToe
