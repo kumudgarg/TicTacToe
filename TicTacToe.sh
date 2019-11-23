@@ -247,29 +247,6 @@ echo "###########################################"
    elif [ ${board[$(($row+2)),$col]} == $sign ] && [ ${board[$(($row+1)),$(($col+1))]} == $sign ]
    then
       board[$row,$(($col+2))]=$computerSymbol
-   else
-	if [ $sign == $computerSymbol ]
-	then
-		while [ true ]
-		do
-			if [ $(isFilledCell) ]
-                        then
-                                echo "check"
-                                break
-                        fi
-			row=$(( RANDOM%$ROW ))
-			col=$(( RANDOM%$COLUMN ))
-			if [ ${board[$row,$col]} == $playerSymbol ] || [ ${board[$row,$col]} == $computerSymbol ]
-			then
-				echo "cell occupied"
-				continue
-			else
-				board[$row,$col]=$computerSymbol
-				break
-			fi
-			
-		done	
-	fi	
    fi
 }
 function isFilledCell()
